@@ -1,4 +1,7 @@
-/venv/
-/env/
-/.idea/
-/.vscode/
+# Environments
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
