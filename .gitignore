@@ -5,3 +5,23 @@ env/
 # IDE
 .idea/
 .vscode/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff
+*.log
+*.pot
+*.pyc
+local.py
+media
+**/migrations/*
+!**/migrations/__init__.py
+
+# Database
+db.sqlite3
+
+# Backup files
+*.bak 
