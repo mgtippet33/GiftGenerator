@@ -43,12 +43,13 @@ class UserAdmin(UserAdmin):
     ordering = ("email",)
     fieldsets = (
         (None, {'fields': ('email', 'password', 'premium', 'theme', 'phone_number', 'birthday')}),
-        )
+    )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
             'fields': ('email', 'password')}
-            ),
-        )
+         ),
+    )
+
 
 admin.site.register(User, UserAdmin)

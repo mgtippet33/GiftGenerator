@@ -52,4 +52,3 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         db_table = "auth_user"
-

@@ -4,8 +4,8 @@ from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
 from .models import User
 
-class UserRegistrationSerializer(serializers.ModelSerializer):
 
+class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('email', 'password')
@@ -19,8 +19,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
 JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
 
-class UserLoginSerializer(serializers.Serializer):
 
+class UserLoginSerializer(serializers.Serializer):
     email = serializers.CharField(max_length=255)
     password = serializers.CharField(max_length=128, write_only=True)
     token = serializers.CharField(max_length=255, read_only=True)
@@ -42,6 +42,6 @@ class UserLoginSerializer(serializers.Serializer):
                 'User with given email and password does not exists'
             )
         return {
-            'email':user.email,
+            'email': user.email,
             'token': jwt_token
         }

@@ -7,8 +7,8 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from .serializers import UserRegistrationSerializer, UserLoginSerializer
 from .models import User
 
-class UserRegistrationView(CreateAPIView):
 
+class UserRegistrationView(CreateAPIView):
     serializer_class = UserRegistrationSerializer
     permission_classes = (AllowAny,)
 
@@ -18,15 +18,14 @@ class UserRegistrationView(CreateAPIView):
         serializer.save()
         status_code = status.HTTP_201_CREATED
         response = {
-            'success' : 'True',
-            'status code' : status_code,
+            'success': 'True',
+            'status code': status_code,
             'message': 'User registered  successfully',
         }
         return Response(response, status=status_code)
 
 
 class UserLoginView(RetrieveAPIView):
-
     serializer_class = UserLoginSerializer
     permission_classes = (AllowAny,)
 
@@ -34,17 +33,16 @@ class UserLoginView(RetrieveAPIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         response = {
-            'success' : 'True',
-            'status code' : status.HTTP_200_OK,
+            'success': 'True',
+            'status code': status.HTTP_200_OK,
             'message': 'User logged in successfully',
-            'token' : serializer.data['token'],
+            'token': serializer.data['token'],
         }
         status_code = status.HTTP_200_OK
         return Response(response, status=status_code)
 
 
 class UserProfileView(RetrieveAPIView):
-
     permission_classes = (IsAuthenticated,)
     authentication_class = JSONWebTokenAuthentication
 

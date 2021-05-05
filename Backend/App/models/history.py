@@ -4,6 +4,7 @@ from .present import Present
 from .criterion import Criterion
 import datetime
 
+
 class History(models.Model):
     GENDER_MALE = 0
     GENDER_FEMALE = 1
