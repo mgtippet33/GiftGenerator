@@ -1,9 +1,8 @@
 from django.db import models
-import datetime
-from django.contrib.auth.models import User
+from .user import User
 from .present import Present
 from .criterion import Criterion
-
+import datetime
 
 class History(models.Model):
     GENDER_MALE = 0
@@ -18,3 +17,6 @@ class History(models.Model):
     age = models.PositiveIntegerField()
     gender = models.IntegerField(choices=GENDER_CHOICES)
     criteria = models.ManyToManyField(Criterion)
+
+    class Meta:
+        db_table = "history"

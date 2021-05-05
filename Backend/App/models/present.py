@@ -11,5 +11,8 @@ class Present(models.Model):
     criteria = models.ManyToManyField(Criterion)
     holidays = models.ManyToManyField(Holiday)
 
+    class Meta:
+        db_table = "present"
+
     def __str__(self):
         return self.name
