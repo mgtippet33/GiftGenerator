@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Criterion(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
 
     class Meta:
         db_table = "criterion"
