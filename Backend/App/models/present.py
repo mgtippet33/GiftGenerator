@@ -1,4 +1,5 @@
 from django.db import models
+
 from .criterion import Criterion
 from .holiday import Holiday
 

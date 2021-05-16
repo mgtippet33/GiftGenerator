@@ -1,6 +1,6 @@
+import lxml
 import requests
 from bs4 import BeautifulSoup, SoupStrainer
-import lxml
 
 TRANSLATIONS = {
     # Праздники

@@ -1,8 +1,10 @@
-from django.db import models
-from .user import User
-from .present import Present
-from .criterion import Criterion
 import datetime
+
+from django.db import models
+
+from .criterion import Criterion
+from .present import Present
+from .user import User
 
 
 class History(models.Model):
