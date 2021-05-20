@@ -46,6 +46,22 @@ h6 {
   padding: 0;
 }
 
+h1 {
+  font-size: 2vw;
+}
+
+h2 {
+  font-size: 1.5vw;
+}
+
+h3 {
+  font-size: 1vw;
+}
+
+h4 {
+  font-size: 0.8vw;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -237,7 +253,7 @@ button:focus,
   color: #000;
   font-family: "Roboto", sans-serif;
   font-weight: 300;
-  font-size: 16px;
+  font-size: 1vw;
   outline: none;
 }
 
@@ -293,13 +309,11 @@ button:focus,
 .speech-bubble h1 {
   margin: 0 auto;
   font-family: 'Bellota';
-  font-size: 2vw;
   font-weight: 400;
 }
 
 .under-bubble-text h2 {
   padding: 5% 0;
-  font-size: 1.5vw;
   animation: 1s ease-out 0s slideInFromRight;
 }
 
@@ -324,7 +338,6 @@ button:focus,
 
 .download-button h3 {
   margin: 0 auto;
-  font-size: 1vw;
   font-weight: 400;
 }
 
@@ -349,10 +362,6 @@ button:focus,
 .examples-text {
   margin-top: 2% 0;
   animation: 1s ease-out 0s slideInFromBottom;
-}
-
-.examples-text h2 {
-  font-size: 1.5vw;
 }
 
 .examples-box {
@@ -415,7 +424,6 @@ button:focus,
 }
 
 .sec2_1 h2 {
-  font-size: 1.5vw;
   animation: 1s ease-out 0s slideInFromLeft;
 }
 
@@ -435,7 +443,6 @@ button:focus,
 }
 
 .sec2_2 h2 {
-  font-size: 1.5vw;
   animation: 1s ease-out 0s slideInFromRight;
 }
 
@@ -455,7 +462,6 @@ button:focus,
 }
 
 .sec2_3 h2 {
-  font-size: 1.5vw;
   animation: 1s ease-out 0s slideInFromLeft;
 }
 
@@ -497,10 +503,6 @@ button:focus,
   animation: 1s ease-out 0s slideInFromTop;
 }
 
-.contact-box h3 {
-  font-size: 1.2vw;
-}
-
 #contact-link {
   float: right;
 }
@@ -519,20 +521,20 @@ form {
   cursor: default;
 }
 
-.btn {
-  width: 7vw;
-  height: 2.5vw;
-}
-
 .reviews-box {
   margin: 2% auto;
   width: 100%;
-  height: 90%;
+  height: 100%;
   padding: 2% 5%;
   position: relative;
   border-radius: 0.6vw;
   box-shadow: 0 0 0.7vw rgba(0, 0, 0, 0.5);
   animation: 1s ease-out 0s slideInFromBottom;
+}
+
+.btn {
+  width: 7vw;
+  height: 2.5vw;
 }
 
 .reviews-box>.row {
@@ -542,18 +544,12 @@ form {
 .reviews-box h2 {
   margin: 0 auto;
   font-family: 'Bellota';
-  font-size: 1.5vw;
   font-weight: 300;
 }
 
-.box-label h3 {
-  font-size: 1.3vw;
-}
-
-.reviews-box h5 {
+.reviews-box h4 {
   margin: 0 auto;
   font-family: 'Bellota';
-  font-size: 0.8vw;
   font-weight: 300;
 }
 
@@ -561,6 +557,10 @@ form {
   width: 2vw;
   font-size: 1.5vw;
   cursor: pointer;
+}
+
+.submit-button {
+  margin-left: -10%;
 }
 
 .submit {
@@ -571,7 +571,7 @@ form {
 .comment-box {
   width: 70%;
   padding: 3% 0;
-  margin: 5% auto;
+  margin: 1% auto;
   background: linear-gradient(to right, #c4c4c400 0%, #ef8155d0 100%);
   border-radius: 0.5vw;
   animation: 1s ease-out 0s slideInFromLeft;
@@ -591,7 +591,7 @@ form {
 
 #inputEmail,
 #inputText {
-  height: 3vw;
+  height: 1.5vw;
   font-size: 1vw;
 }
 
@@ -663,7 +663,7 @@ form {
   }
 }
 
-@media screen and (max-width: 924px) {
+@media (max-width: 768px) {
   body {
     padding-top: 0;
   }
@@ -672,8 +672,19 @@ form {
     margin-left: -45px;
   }
 
+  #header #logo h1 {
+    font-size: 22px;
+  }
+
+  #header #logo img {
+    padding: 0;
+    margin-left: 10px;
+    width: 35px;
+    height: 35px;
+  }
+
   #header {
-    padding: 20px 0;
+    padding: 15px 0;
     height: 10%;
     position: relative;
     background-color: #B0D6FB;
@@ -689,9 +700,28 @@ form {
     height: 10%;
   }
 
+  .nav-menu a {
+    position: relative;
+    padding: 0 3.5vh;
+    text-decoration: none;
+    display: inline-block;
+    color: #000;
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    font-size: 1.5vh;
+    outline: none;
+  }
+
   .nav-button {
     margin-right: 35px;
     margin-top: -15px;
+    width: 6vh;
+    height: 5vh;
+  }
+
+  .navbar-toggler-icon {
+    width: 2vh;
+    height: 3vh;
   }
 
   .back-to-top {
@@ -704,22 +734,172 @@ form {
     color: #fff;
   }
 
-  .reviews-box>.row {
-    height: 6vw;
+  .back-to-top {
+    bottom: 15px;
   }
 
   .box-text {
     margin-top: -4vw;
   }
-}
 
-@media (max-width: 768px) {
-  .back-to-top {
-    bottom: 15px;
+  h1 {
+    font-size: 2vh;
   }
 
-  #header #logo h1 {
-    font-size: 28px;
+  h2 {
+    font-size: 1.5vh;
+  }
+
+  h3,
+  h4 {
+    font-size: 1vh;
+  }
+
+  .sec2_1 {
+    position: relative;
+    top: 5vh;
+    left: 14vh;
+  }
+
+  .sec2_1 h2 {
+    animation: 1s ease-out 0s slideInFromLeft;
+  }
+
+  .ycircle {
+    display: inline-block;
+    width: 3vh;
+    line-height: 3vh;
+    border-radius: 50%;
+    text-align: center;
+    background-color: #ECFBB0;
+  }
+
+  .sec2_2 {
+    position: relative;
+    top: 9vh;
+    left: 20vh;
+  }
+
+  .sec2_2 h2 {
+    animation: 1s ease-out 0s slideInFromRight;
+  }
+
+  .pcircle {
+    display: inline-block;
+    width: 3vh;
+    line-height: 3vh;
+    border-radius: 50%;
+    text-align: center;
+    background-color: #BFB0FB;
+  }
+
+  .sec2_3 {
+    position: relative;
+    top: 13vh;
+    left: 24vh;
+  }
+
+  .sec2_3 h2 {
+    animation: 1s ease-out 0s slideInFromLeft;
+  }
+
+  .gcircle {
+    display: inline-block;
+    width: 3vh;
+    line-height: 3vh;
+    border-radius: 50%;
+    text-align: center;
+    background-color: #B0FBB7;
+  }
+
+  .img_section_2 {
+    width: 20vh;
+    height: 15vh;
+    animation: 1s ease-out 0s slideInFromTop;
+  }
+
+  .graph-img img {
+    width: 25vh;
+    height: 24vh;
+    animation: 1s ease-out 0s slideInFromTop;
+  }
+
+  .contact-box {
+    margin: 2% auto;
+    width: 80%;
+    height: 70%;
+    padding: 5%;
+    position: relative;
+    border-radius: 0.6vw;
+    box-shadow: 0 0 0.7vw rgba(0, 0, 0, 0.5);
+    animation: 1s ease-out 0s slideInFromTop;
+  }
+
+  .contact-box h3 {
+    font-size: 1.2vh;
+  }
+
+  .btn {
+    width: 7vh;
+    height: 2.5vh;
+  }
+
+  .reviews-box>.row {
+    height: 6vh;
+  }
+
+  .reviews-box h3 {
+    font-size: 1.5vh;
+  }
+
+  .fa-star {
+    width: 2vh;
+    font-size: 1.5vh;
+    cursor: pointer;
+  }
+
+  #inputEmail,
+  #inputText {
+    height: 2vh;
+    font-size: 1.5vh;
+  }
+
+  .submit {
+    font-size: 1.2vh;
+    padding: 5%;
+  }
+
+  .submit-button {
+    margin-left: -15%;
+  }
+
+  .comment {
+    margin-left: 2%;
+  }
+
+  .comment-box {
+    width: 85%;
+    padding: 3% 0;
+    margin: 1% auto;
+    background: linear-gradient(to right, #c4c4c400 0%, #ef8155d0 100%);
+    border-radius: 0.5vw;
+    animation: 1s ease-out 0s slideInFromLeft;
+  }
+
+  .comment-box {
+    margin-left: 10%;
+  }
+
+  .avatar img {
+    width: 4vh;
+    height: 4vh;
+    border-radius: 50%;
+  }
+
+  .comment-text {
+    width: 100%;
+    height: 50%;
+    font-size: 1vh;
   }
 
 }
