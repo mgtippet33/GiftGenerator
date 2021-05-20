@@ -31,7 +31,7 @@ class UserRegistrationView(CreateAPIView):
     serializer_class = UserRegistrationSerializer
     permission_classes = (AllowAny,)
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -65,7 +65,7 @@ class UserProfileView(RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
     authentication_class = JSONWebTokenAuthentication
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         try:
             user_profile = User.objects.get(email=request.user)
             status_code = status.HTTP_200_OK
