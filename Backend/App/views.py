@@ -23,7 +23,7 @@ def index(request):
         send_mail(subject, message, EMAIL_HOST_USER, [
             EMAIL_HOST_USER], fail_silently=False)
         messages.success(request, 'Form submission successful')
-        return redirect("home")
+        return redirect('home')
     return render(request, 'index.html', {})
 
 
@@ -33,13 +33,23 @@ class UserRegistrationView(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        status_code = status.HTTP_201_CREATED
+
+        if serializer.is_valid():
+            serializer.save()
+            success = True
+            status_code = status.HTTP_200_OK
+            message = 'User registered successfully'
+        else:
+            success = False
+            message = ''
+            for value in serializer.errors.values():
+                message += value[0][:-1].capitalize() + ';'
+            status_code = status.HTTP_400_BAD_REQUEST
+
         response = {
-            'success': 'True',
+            'success': success,
             'status code': status_code,
-            'message': 'User registered  successfully',
+            'message': message,
         }
         return Response(response, status=status_code)
 
@@ -50,14 +60,26 @@ class UserLoginView(RetrieveAPIView):
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
+
+        if serializer.is_valid():
+            success = True
+            status_code = status.HTTP_200_OK
+            message = 'User logged in successfully'
+            token = serializer.data['token']
+        else:
+            success = False
+            message = ''
+            for value in serializer.errors.values():
+                message += value[0][:-1].capitalize() + ';'
+            status_code = status.HTTP_400_BAD_REQUEST
+            token = None
+
         response = {
-            'success': 'True',
-            'status code': status.HTTP_200_OK,
-            'message': 'User logged in successfully',
-            'token': serializer.data['token'],
+            'success': success,
+            'status code': status_code,
+            'message': message,
+            'token': token
         }
-        status_code = status.HTTP_200_OK
         return Response(response, status=status_code)
 
 
@@ -70,7 +92,7 @@ class UserProfileView(RetrieveAPIView):
             user_profile = User.objects.get(email=request.user)
             status_code = status.HTTP_200_OK
             response = {
-                'success': 'true',
+                'success': True,
                 'status code': status_code,
                 'message': 'User profile fetched successfully',
                 'data': [{
@@ -83,7 +105,7 @@ class UserProfileView(RetrieveAPIView):
         except Exception as e:
             status_code = status.HTTP_400_BAD_REQUEST
             response = {
-                'success': 'false',
+                'success': False,
                 'status code': status.HTTP_400_BAD_REQUEST,
                 'message': 'User does not exists',
                 'error': str(e)
