@@ -26,3 +26,6 @@ db*.json
 
 # Backup files
 *.bak
+
+# Classification data
+classification_data/
