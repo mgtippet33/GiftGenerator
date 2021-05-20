@@ -51,7 +51,8 @@ def get_product(url, request_session=None):
 
     if response.status_code == 200:
         strainer = SoupStrainer(['img', 'p', 'span'])
-        html = BeautifulSoup(response.text, features='lxml', parse_only=strainer)
+        html = BeautifulSoup(
+            response.text, features='lxml', parse_only=strainer)
 
         img = html.find('img', class_='ek-picture__item')
         desc = html.find('p')
@@ -82,14 +83,17 @@ def search_products(interests, holiday):
             response = session.get(search_link)
 
             if response.status_code == 200:
-                strainer = SoupStrainer('a', class_='ek-link ek-link_blackhole_full-hover')
-                html = BeautifulSoup(response.text, features='lxml', parse_only=strainer)
+                strainer = SoupStrainer(
+                    'a', class_='ek-link ek-link_blackhole_full-hover')
+                html = BeautifulSoup(
+                    response.text, features='lxml', parse_only=strainer)
 
                 tags = html.findAll('a')
                 for tag in tags:
                     product_link = f'https://prom.ua{tag["href"]}'
                     # remove token from link
                     product_link = product_link.split('?')[0]
-                    product = get_product(product_link, request_session=session)
+                    product = get_product(
+                        product_link, request_session=session)
                     if product:
                         yield product, product_link, query[0], query[1], query[2]
