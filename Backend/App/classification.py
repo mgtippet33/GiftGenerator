@@ -25,8 +25,9 @@ def clean_text(text):
         text = str(text)
 
     text = text.lower()
-    text = re.sub(r"(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)|^rt|http.+?", "", text)
-    text = re.sub(r"^\W+", "", text)
+    text = re.sub(
+        r'(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)|^rt|http.+?', '', text)
+    text = re.sub(r'^\W+', '', text)
 
     words = []
     for word in text.split():
