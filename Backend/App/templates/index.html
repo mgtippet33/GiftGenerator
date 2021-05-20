@@ -1,0 +1,264 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+GiftGenerator
+{% endblock %}
+
+{% block content %}
+<div class="modal fade" id="downloadModal" tabindex="-1" aria-labelledby="dowloadModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title"></h5>
+        <div type="button" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fa fa-times close-button" aria-hidden="true"></i>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="download-button-in text-center" type="button" style="margin: 0% auto; width: 50%;">Завантажити додаток</div>
+        <div class="download-button-in text-center" type="button" style="margin: 5% auto; width: 50%;" onclick="window.open('http://t.me/GiftsGeneratorBot', '_blank');">Перейти до телеграм боту</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="dowloadModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title"></h5>
+        <div type="button" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fa fa-times close-button" aria-hidden="true"></i>
+        </div>
+      </div>
+      <div class="modal-body">
+        <h1 class="text-center" style="margin-bottom: 10%;">Дякуємо за відгук!</h1>
+      </div>
+    </div>
+  </div>
+</div>
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <script src="{% static 'js/jquery.min.js' %}"></script>
+            <script src="{% static 'js/bootstrap.min.js' %}"></script>
+            <script>
+                $(document).ready(function(){
+                    $("#successModal").modal('show');
+                });
+            </script>
+        {% endfor %}
+    </ul>
+{% endif %}
+<section class="main_section" id="home">
+    <div class="content container">
+        <div class="row">
+            <div class="col-8">
+                <div class="speech-bubble text-center">
+                    <h1>Не можеш знайти подарунок?</h1>
+                </div>
+                <div class="under-bubble-text text-center">
+                    <h2>Допоможемо підібрати на будь-який смак!</h2>
+                </div>
+                <div class="download-button text-center" type="button" data-bs-toggle="modal" data-bs-target="#downloadModal">
+                    <h3>Перейти до додатку</h3>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="gift">
+                    <img src="{% static 'img/logo.png' %}" alt="logo_image">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="examples-text text-center">
+                    <h2>Приклади подарунків</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="row examples-box text-center align-items-center">
+                    <div class="col-4">
+                        <img class="img1" src="{% static 'img/gift_example_1.png' %}" alt="gift_image">
+                    </div>
+                    <div class="col-4">
+                        <img class="img2" src="{% static 'img/gift_example_2.png' %}" alt="gift_image">
+                    </div>
+                    <div class="col-4">
+                        <img class="img3" src="{% static 'img/gift_example_3.png' %}" alt="gift_image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="section" id="business">
+    <div class="content container">
+        <div class="row">
+            <div class="col header-business">
+                <h1>Чому саме ми?</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8 sec2_1">
+                <h2><div class="ycircle">1.</div> Обираємо подарунок саме під ваші потреби</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-7 sec2_2">
+                <h2><div class="pcircle">2.</div> Здійснюємо усі таємні побажання людини завдяки аналізу соціальної мережі</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6 sec2_3">
+                <h2><div class="gcircle">3.</div> Допомагаємо зробити вау-ефект на будь-якому святі</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col sec2_img">
+                <img class="img_section_2" src="{% static 'img/section_2.png' %}" alt="present_image">
+            </div>
+        </div>
+    </div>
+</section>
+<section class="section" id="contacts">
+    <div class="content container">
+        <div class="row">
+            <div class="col header-contacts text-center">
+                <h1>Контакти</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6 graph-img text-center align-self-center">
+                <img src="{% static 'img/graph.png' %}" alt="graph_image">
+            </div>
+            <div class="col-6">
+                <div class="row">
+                    <div class="contact-box" style="background-color: #C3CCFA;">
+                        <h3>
+                            <span id="contact-title">Gmail:</span>
+                            <span id="contact-link">giftgenerator</span>  
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="contact-box" style="background-color: #F9C2D6;">
+                        <h3>
+                            <span id="contact-title">Instagtam:</span>
+                            <span id="contact-link">giftgenerator</span>  
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="contact-box" style="background-color: #E8FAC3;">
+                        <h3>
+                            <span id="contact-title">Twitter:</span>
+                            <span id="contact-link">giftgenerator</span>  
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="contact-box" style="background-color: #FAD7C3;">
+                        <h3>
+                            <span id="contact-title">Telegram:</span>
+                            <span id="contact-link">giftgenerator</span>  
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="contact-box" style="background-color: #D1FAC3;">
+                        <h3>
+                            <span id="contact-title">Facebook:</span>
+                            <span id="contact-link">giftgenerator</span>  
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="section" id="reviews">
+    <div class="content container">
+        <div class="row">
+            <div class="col header-reviews text-center">
+                <h1>Вiдгуки</h1>
+            </div>
+        </div>
+        <form method="POST" id="form">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-12">
+                    <div class="reviews-box">
+                        <div class="row">
+                            <div class="col-12 header-box">
+                                <h2 class="text-center">Залиште свiй вiдгук</h2>
+                                <h5 class="text-center">Увага! Вiдгук повинен пройти модерацiю</h5>
+                            </div>
+                        </div>
+                        <div class="row align-items-end">
+                            <div class="col-3 box-label">
+                                <h3>Рейтинг</h3>
+                            </div>
+                            <div class="col-7">
+                                <input id="rating" name="rating" hidden value="0">
+                                <i class="fa fa-star star" id="star-1" aria-hidden="true"></i>
+                                <i class="fa fa-star star" id="star-2" aria-hidden="true"></i>
+                                <i class="fa fa-star star" id="star-3" aria-hidden="true"></i>
+                                <i class="fa fa-star star" id="star-4" aria-hidden="true"></i>
+                                <i class="fa fa-star star" id="star-5" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        <div class="row align-items-end">
+                            <div class="col-3 box-label">
+                                <h3>Пошта</h3>
+                            </div>
+                            <div class="col-7 box-text">
+                                <input type="email" name="email" class="form-control" id="inputEmail" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="row align-items-end" style="padding-bottom: 10%;">
+                            <div class="col-3 box-label">
+                                <h3>Повідомлення</h3>
+                            </div>
+                            <div class="col-7 box-text">
+                                <input type="text" name="message" class="form-control" id="inputText" autocomplete="off">
+                            </div>
+                            <div class="col-2">
+                                <button type="submit" class="btn btn-light submit" autocomplete="off">Надіслати</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="comment-box">
+                    <div class="row">
+                        <div class="col-2 avatar text-center align-self-center">
+                            <img src="{% static 'img/avatar.png' %}" alt="avatar_image">
+                        </div>
+                        <div class="col-10">
+                            <div class="row" style="padding-bottom: 1%;">
+                                <i class="fa fa-star" id="r-star-1" aria-hidden="true" style="color: rgb(248, 252, 21); -webkit-text-stroke: 1px #000;"></i>
+                                <i class="fa fa-star" id="r-star-2" aria-hidden="true" style="color: rgb(248, 252, 21); -webkit-text-stroke: 1px #000;"></i>
+                                <i class="fa fa-star" id="r-star-3" aria-hidden="true" style="color: rgb(248, 252, 21); -webkit-text-stroke: 1px #000;"></i>
+                                <i class="fa fa-star" id="r-star-4" aria-hidden="true" style="color: rgb(248, 252, 21); -webkit-text-stroke: 1px #000;"></i>
+                                <i class="fa fa-star" id="r-star-5" aria-hidden="true" style="color: rgb(248, 252, 21); -webkit-text-stroke: 1px #000;"></i>
+                            </div>
+                            <div class="row comment-text" style="padding-top: 1%;">
+                                <p>
+                                    Lorem ipsum dolor sit amet consectetur adipiscing elit taciti, non justo cursus morbi ac nullam ex sagittis, cubilia luctus montes vivamus parturient fermentum integer. Consectetur consequat neque fames pulvinar vivamus molestie scelerisque penatibus quisque platea
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

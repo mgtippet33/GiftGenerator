@@ -1,3 +1,7 @@
+from django.shortcuts import render, redirect
+from django.core.mail import send_mail
+from django.contrib import messages
+
 from rest_framework import status
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -6,6 +10,21 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from .models import User
 from .serializers import UserRegistrationSerializer, UserLoginSerializer
+from GiftGenerator.settings import EMAIL_HOST_USER
+
+
+def index(request):
+    if request.method == 'POST':
+        rating = request.POST['rating']
+        email = request.POST['email']
+        message = request.POST['message']
+        subject = 'Feedback'
+        message = f'Rating: {rating}/5\nEmail: {email}\nMessage: {message}\n'
+        send_mail(subject, message, EMAIL_HOST_USER, [
+            EMAIL_HOST_USER], fail_silently=False)
+        messages.success(request, 'Form submission successful')
+        return redirect("home")
+    return render(request, 'index.html', {})
 
 
 class UserRegistrationView(CreateAPIView):
