@@ -1,5 +1,5 @@
 import datetime
-
+from django.utils.timezone import now
 from django.db import models
 
 from .criterion import Criterion
@@ -16,8 +16,8 @@ class History(models.Model):
 
     present = models.ForeignKey(Present, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    date = models.DateField(default=datetime.date.today)
-    link = models.CharField(max_length=200)
+    date = models.DateTimeField(default=now)
+    link = models.CharField(max_length=200, blank=True)
     age = models.PositiveIntegerField()
     gender = models.IntegerField(choices=GENDER_CHOICES)
     criteria = models.ManyToManyField(Criterion)
