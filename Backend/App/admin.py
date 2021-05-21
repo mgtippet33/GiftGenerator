@@ -43,7 +43,7 @@ class UserAdmin(UserAdmin):
     list_display = ("email",)
     ordering = ("email",)
     fieldsets = (
-        (None, {'fields': ('email', 'password', 'premium',
+        (None, {'fields': ('email', 'password', 'name', 'premium',
          'theme', 'phone_number', 'birthday')}),
     )
     add_fieldsets = (

@@ -4,12 +4,16 @@ from django.db import models
 
 class UserManager(BaseUserManager):
 
-    def create_user(self, email, password=None):
+    def create_user(self, email, password=None, name=None):
         if not email:
             raise ValueError('Users must have an email address')
 
+        if name is None:
+            name = email[:email.find('@')]
+
         user = self.model(
             email=self.normalize_email(email),
+            name=name
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -37,6 +41,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
+    name = models.CharField(max_length=50, blank=True)
     premium = models.BooleanField(default=False)
     theme = models.IntegerField(default=0)
     phone_number = models.CharField(max_length=13, blank=True)
