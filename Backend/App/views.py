@@ -33,7 +33,7 @@ class UserRegistrationView(CreateAPIView):
     permission_classes = (AllowAny,)
 
     def post(self, request, *args, **kwargs):
-        if not request.data['password']:
+        if request.data.get('password', None) is None:
             request.data['password'] = BaseUserManager().make_random_password()
 
         serializer = self.serializer_class(data=request.data)
@@ -63,7 +63,7 @@ class UserLoginView(RetrieveAPIView):
     permission_classes = (AllowAny,)
 
     def post(self, request):
-        if request.data['password'] is None:
+        if request.data.get('password', None) is None:
             if User.objects.filter(email=request.data['email']).exists():
                 user = User.objects.get(email=request.data['email'])
                 request.data['password'] = user.password
