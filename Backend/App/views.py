@@ -68,7 +68,7 @@ class UserLoginView(RetrieveAPIView):
         if request.data.get('password', None) is None:
             if User.objects.filter(email=request.data['email']).exists():
                 user = User.objects.get(email=request.data['email'])
-                request.data['password'] = user.password
+                request.data['password'] = 'None'
             else:
                 response = {
                     'success': False,
