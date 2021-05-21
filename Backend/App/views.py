@@ -1,3 +1,5 @@
+import re
+
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.contrib import messages
@@ -12,7 +14,8 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from .models import User, Present, Criterion
 from .serializers import UserRegistrationSerializer, UserLoginSerializer
-from .functions import query
+from .functions import query, parse_twitter, parse_facebook
+from .classification import make_classification_tools, page_predict
 from GiftGenerator.settings import EMAIL_HOST_USER
 
 
@@ -36,11 +39,27 @@ def index(request):
 def search(request):
     try:
         gender = request.data['gender']
-        age = 'Дитина' if request.data['age'] < 13 else 'Підліток' if request.data['age'] < 19 else 'Дорослий'
+        age = 'Дитина' if request.data['age'] < 13 else \
+            'Підліток' if request.data['age'] < 19 else 'Дорослий'
         link = request.data['link']
         holiday = request.data['holiday']
+        interests = request.data['interests']
+
+        if link and re.search(r'facebook|twitter', link):
+            model, text_transformer = make_classification_tools()
+            if 'twitter' in link:
+                parse_data = parse_twitter(link)
+            else:
+                parse_data = parse_facebook(link)
+
+            interests += page_predict(
+                page_data=parse_data,
+                classifier=model,
+                vectorizer=text_transformer
+            )
+
         string = ''
-        for interest in request.data['interests']:
+        for interest in interests:
             string += f", '{interest}'"
         sql = \
             f"""
@@ -51,7 +70,7 @@ def search(request):
                     inner join present_holidays ph on present.id = ph.present_id
                     inner join holiday h on h.id = ph.holiday_id
             group by present.id
-            order by SUM(c.name in ('{gender}', '{age}'{string})) + SUM(h.name in ('{holiday}')) DESC, rate;
+            order by SUM(c.name in ('{gender}', '{age}'{string})) + SUM(h.name in ('{holiday}')) DESC, present.rate;
             """
         status_code = status.HTTP_200_OK
         response = {
