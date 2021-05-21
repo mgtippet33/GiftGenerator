@@ -16,7 +16,7 @@ from sklearn import preprocessing
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 
-from functions import parse_twitter, parse_facebook
+from .functions import parse_twitter, parse_facebook, TRANSLATIONS
 
 lemma = nltk.wordnet.WordNetLemmatizer()
 classes = ('anime', 'games', 'movie', 'technology', 'traveling')
@@ -42,13 +42,13 @@ def clean_text(text):
 
 
 def make_classification_tools():
-    classifier_path = 'classification_data/classifier.sav'
-    vectorizer_path = 'classification_data/vectorizer.sav'
+    classifier_path = 'App/classification_data/classifier.sav'
+    vectorizer_path = 'App/classification_data/vectorizer.sav'
 
     if os.path.exists(classifier_path) and os.path.exists(vectorizer_path):
         return pickle.load(open(classifier_path, 'rb')), pickle.load(open(vectorizer_path, 'rb'))
 
-    handle = pandas.read_csv('classification_data/interests.csv')
+    handle = pandas.read_csv('App/classification_data/interests.csv')
 
     X = handle['text'].apply(lambda x: numpy.str_(x))
     y = handle['classification']
@@ -89,7 +89,7 @@ def page_predict(page_data, classifier, vectorizer, criteria_count=2):
         key=lambda item: item[1],
         reverse=True
     )
-    criteria_names = tuple(k for k, v in criteria[:criteria_count])
+    criteria_names = tuple(TRANSLATIONS[k] for k, v in criteria[:criteria_count])
 
     return criteria_names
 
@@ -102,27 +102,3 @@ def text_predict(text, classifier, vectorizer):
     probs = list(classifier.predict_proba(coded_string)[0])
 
     return class_, probs
-
-
-if __name__ == '__main__':
-    # Prediction Demo
-    model, text_transformer = make_classification_tools()
-    strings = (...,)
-
-    for string in strings:
-        prediction_class, prediction_probs = text_predict(
-            text=string,
-            classifier=model,
-            vectorizer=text_transformer
-        )
-        print(classes[prediction_class])
-        print(prediction_probs)
-
-    # Twitter Page analysis Demo
-    interests = page_predict(
-        page_data=parse_twitter(url=...),
-        classifier=model,
-        vectorizer=text_transformer
-    )
-
-    print(interests)
