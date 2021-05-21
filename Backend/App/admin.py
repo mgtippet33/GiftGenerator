@@ -5,26 +5,6 @@ from django.contrib.auth.admin import UserAdmin
 from .models import Criterion, Holiday, Present, History, User
 
 
-@admin.register(Criterion)
-class CriterionAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(Holiday)
-class HolidayAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(Present)
-class PresentAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(History)
-class HistoryAdmin(admin.ModelAdmin):
-    pass
-
-
 class UserCreationForm(forms.ModelForm):
     class Meta:
         model = User
@@ -32,19 +12,22 @@ class UserCreationForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super(UserCreationForm, self).save(commit=False)
-        user.set_password(self.cleaned_data["password"])
+        user.set_password(self.cleaned_data['password'])
         if commit:
             user.save()
         return user
 
 
+@admin.register(User)
 class UserAdmin(UserAdmin):
     add_form = UserCreationForm
-    list_display = ("email",)
-    ordering = ("email",)
+    list_display = ('email', 'name',)
+    ordering = ('email',)
     fieldsets = (
-        (None, {'fields': ('email', 'password', 'name', 'premium',
-         'theme', 'phone_number', 'birthday')}),
+        (None, {
+            'fields': ('email', 'password', 'name', 'premium',
+                       'theme', 'phone_number', 'birthday')
+        }),
     )
     add_fieldsets = (
         (None, {
@@ -54,4 +37,29 @@ class UserAdmin(UserAdmin):
     )
 
 
-admin.site.register(User, UserAdmin)
+@admin.register(Criterion)
+class CriterionAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    ordering = ('name',)
+    search_fields = ('name',)
+
+
+@admin.register(Holiday)
+class HolidayAdmin(admin.ModelAdmin):
+    list_display = ('name', 'date', 'owner',)
+    ordering = ('name',)
+    search_fields = ('name',)
+
+
+@admin.register(Present)
+class PresentAdmin(admin.ModelAdmin):
+    list_display = ('name', 'rate', 'price', 'link', 'desc',)
+    ordering = ('-rate',)
+    search_fields = ('name',)
+
+
+@admin.register(History)
+class HistoryAdmin(admin.ModelAdmin):
+    list_display = ('user', 'present', 'date',)
+    ordering = ('user',)
+    search_fields = ('user',)
