@@ -12,7 +12,8 @@ For help to get started with Django, see the online [documentation](https://docs
 
 1. Clone/download this repository `git clone https://github.com/mgtippet33/GiftGenerator.git`
 1. Enter local repository directory `cd GiftGenerator`
-1. Install requirements `pip install requirements.txt`
+1. Install requirements `pip install -r requirements.txt`
+1. Enter backend directory `cd Backend`
 1. Run server to make sure everything is fine `python manage.py runserver`
 
 ## Contributions
