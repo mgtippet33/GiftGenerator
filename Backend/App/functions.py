@@ -138,8 +138,8 @@ def search_products(interests, holiday):
             (inter[0], inter[1], None)
         )
 
-        for query in queries:
-            search_link = f'https://prom.ua/search?search_term={" ".join(filter(None, query))}'
+        for q in queries:
+            search_link = f'https://prom.ua/search?search_term={" ".join(filter(None, q))}'
             response = session.get(search_link)
 
             if response.status_code == 200:
@@ -156,7 +156,7 @@ def search_products(interests, holiday):
                     product = get_product(
                         product_link, request_session=session)
                     if product:
-                        yield product, product_link, query[0], query[1], query[2]
+                        yield product, product_link, q[0], q[1], q[2]
 
 
 def get_dict(cursor):
