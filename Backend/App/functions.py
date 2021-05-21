@@ -6,6 +6,8 @@ from bs4 import BeautifulSoup, SoupStrainer
 from facebook_scraper import get_posts
 from pytwitterscraper import TwitterScraper
 
+from django.db import connection
+
 TRANSLATIONS = {
     # Праздники
     'День рождения': 'День народження',
@@ -149,3 +151,18 @@ def search_products(interests, holiday):
                         product_link, request_session=session)
                     if product:
                         yield product, product_link, query[0], query[1], query[2]
+
+
+def get_dict(cursor):
+    desc = cursor.description
+    return [
+        dict(zip([col[0] for col in desc], row))
+        for row in cursor.fetchall()
+    ]
+
+
+def query(sql):
+    with connection.cursor() as cursor:
+        cursor.execute(sql)
+        result = [dictionary for dictionary in get_dict(cursor)]
+    return result
