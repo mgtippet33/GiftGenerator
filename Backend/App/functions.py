@@ -61,25 +61,25 @@ def cut_url(url):
     return name
 
 
-def parse_twitter(url, count=10):
+def parse_twitter(url, tweets_count=10):
     ts = TwitterScraper()
     name = cut_url(url)
     profile = ts.get_profile(name=name)
     profile_id = profile.__dict__['id']
 
     tweets_text = set()
-    tweets = ts.get_tweets(profile_id, count=count)
+    tweets = ts.get_tweets(profile_id, count=tweets_count)
     for tweet in tweets.contents:
         tweets_text.add(tweet['text'])
 
     return tweets_text
 
 
-def parse_facebook(url, count=2):
+def parse_facebook(url, posts_count=2):
     name = cut_url(url)
 
     posts_text = set()
-    for post in get_posts(name, pages=count):
+    for post in get_posts(name, pages=posts_count):
         posts_text.add(post['text'])
 
     return posts_text
