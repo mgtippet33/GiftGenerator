@@ -45,7 +45,7 @@ def search(request):
         holiday = request.data['holiday']
         interests = request.data['interests']
 
-        if link and re.search(r'facebook|twitter', link):
+        if link != 'null' and re.search(r'facebook|twitter', link):
             model, text_transformer = make_classification_tools()
             if 'twitter' in link:
                 parse_data = parse_twitter(link)
@@ -70,13 +70,14 @@ def search(request):
                     inner join present_holidays ph on present.id = ph.present_id
                     inner join holiday h on h.id = ph.holiday_id
             group by present.id
-            order by SUM(c.name in ('{gender}', '{age}'{string})) + SUM(h.name in ('{holiday}')) DESC, present.rate;
+            order by SUM(c.name in ('{gender}', '{age}'{string})) + SUM(h.name in ('{holiday}')) DESC, present.rate
+            limit 10;
             """
         status_code = status.HTTP_200_OK
         response = {
             'success': True,
             'status code': status_code,
-            'data': query(sql)[:10]
+            'data': query(sql)
         }
     except:
         status_code = status.HTTP_400_BAD_REQUEST
