@@ -16,8 +16,10 @@ from sklearn import preprocessing
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 
+from functions import parse_twitter, parse_facebook
+
 lemma = nltk.wordnet.WordNetLemmatizer()
-classes = ('anime', 'games', 'movie', 'music', 'technology', 'traveling')
+classes = ('anime', 'games', 'movie', 'technology', 'traveling')
 
 
 def clean_text(text):
@@ -73,7 +75,26 @@ def make_classification_tools():
     return classifier, vectorizer
 
 
-def predict(text, classifier, vectorizer):
+def page_predict(page_data, classifier, vectorizer, criteria_count=2):
+    criteria = {c: 0 for c in classes}
+
+    for text in page_data:
+        _, probs = text_predict(text, classifier, vectorizer)
+        for i, v in enumerate(probs):
+            class_idx = classes[i]
+            criteria[class_idx] += v
+
+    criteria = sorted(
+        criteria.items(),
+        key=lambda item: item[1],
+        reverse=True
+    )
+    criteria_names = tuple(k for k, v in criteria[:criteria_count])
+
+    return criteria_names
+
+
+def text_predict(text, classifier, vectorizer):
     clear_string = clean_text(text)
     coded_string = vectorizer.transform([clear_string])
 
@@ -84,14 +105,24 @@ def predict(text, classifier, vectorizer):
 
 
 if __name__ == '__main__':
+    # Prediction Demo
     model, text_transformer = make_classification_tools()
     strings = (...,)
 
     for string in strings:
-        prediction_class, prediction_probs = predict(
+        prediction_class, prediction_probs = text_predict(
             text=string,
             classifier=model,
             vectorizer=text_transformer
         )
         print(classes[prediction_class])
         print(prediction_probs)
+
+    # Twitter Page analysis Demo
+    interests = page_predict(
+        page_data=parse_twitter(url=...),
+        classifier=model,
+        vectorizer=text_transformer
+    )
+
+    print(interests)
