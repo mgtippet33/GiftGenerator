@@ -9,7 +9,7 @@ from .models import User
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('email', 'password')
+        fields = ('email', 'password', 'name')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -26,10 +26,20 @@ class UserLoginSerializer(serializers.Serializer):
     password = serializers.CharField(max_length=128, write_only=True)
     token = serializers.CharField(max_length=255, read_only=True)
 
+    def authenticate(self, email=None, password=None):
+        try:
+            if password is None:
+                user = User.objects.get(email=email)
+            else:
+                user = User.objects.get(email=email, password=password)
+            return user
+        except User.DoesNotExist:
+            return None
+
     def validate(self, data):
         email = data.get('email', None)
         password = data.get('password', None)
-        user = authenticate(email=email, password=password)
+        user = self.authenticate(email=email, password=password)
         if user is None:
             raise serializers.ValidationError(
                 'A user with this email or password is not found.'
