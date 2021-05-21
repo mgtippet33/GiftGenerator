@@ -1,6 +1,10 @@
+import re
+
 import lxml
 import requests
 from bs4 import BeautifulSoup, SoupStrainer
+from facebook_scraper import get_posts
+from pytwitterscraper import TwitterScraper
 
 TRANSLATIONS = {
     # Праздники
@@ -47,6 +51,38 @@ TRANSLATIONS = {
     'Інше': 'Інше',
     None: 'Інше'
 }
+
+
+def cut_url(url):
+    name = re.sub(r'.*(twitter|facebook).com/', '', url)
+
+    if name[-1] == '/':
+        name = name[:-1]
+    return name
+
+
+def parse_twitter(url, count=10):
+    ts = TwitterScraper()
+    name = cut_url(url)
+    profile = ts.get_profile(name=name)
+    profile_id = profile.__dict__['id']
+
+    tweets_text = set()
+    tweets = ts.get_tweets(profile_id, count=count)
+    for tweet in tweets.contents:
+        tweets_text.add(tweet['text'])
+
+    return tweets_text
+
+
+def parse_facebook(url, count=2):
+    name = cut_url(url)
+
+    posts_text = set()
+    for post in get_posts(name, pages=count):
+        posts_text.add(post['text'])
+
+    return posts_text
 
 
 def to_float(string):
