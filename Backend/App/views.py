@@ -33,6 +33,7 @@ class UserRegistrationView(CreateAPIView):
     permission_classes = (AllowAny,)
 
     def post(self, request, *args, **kwargs):
+        request.POST._mutable = True
         if request.data.get('password', None) is None:
             request.data['password'] = BaseUserManager().make_random_password()
 
@@ -63,6 +64,7 @@ class UserLoginView(RetrieveAPIView):
     permission_classes = (AllowAny,)
 
     def post(self, request):
+        request.POST._mutable = True
         if request.data.get('password', None) is None:
             if User.objects.filter(email=request.data['email']).exists():
                 user = User.objects.get(email=request.data['email'])
