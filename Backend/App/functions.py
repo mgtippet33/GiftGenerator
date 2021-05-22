@@ -135,11 +135,19 @@ def get_product(url, request_session=None):
         price = html.find('span', class_='ek-text ek-text_weight_bold')
 
         if img and desc and price:
-            name = ' '.join(img['alt'].strip().split(' ')[:3])
-            desc = desc.text.strip()[:60]
+            name = img['alt'].strip()
+            name = re.sub(r'[^\w\s]', '', name)
+            name = re.sub(r'\s\s', ' ', name)
+            name = ' '.join(name.split(' ')[:4])
+            name = name[:50]
+
+            desc = desc.text.strip().split('.')
+            desc = ' '.join(desc[:2])
+            desc = desc[:400]
+
             price = to_float(price.text)
 
-            if len(name) and len(desc) and price:
+            if len(name) > 2 and len(desc) > 3 and price:
                 return name, desc, price
 
 
