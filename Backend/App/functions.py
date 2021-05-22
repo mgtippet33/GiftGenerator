@@ -1,12 +1,14 @@
+import datetime
 import re
 
 import lxml
 import requests
 from bs4 import BeautifulSoup, SoupStrainer
+from django.db import connection
 from facebook_scraper import get_posts
 from pytwitterscraper import TwitterScraper
 
-from django.db import connection
+from .models import Holiday
 
 TRANSLATIONS = {
     # Праздники
@@ -101,6 +103,20 @@ def to_float(string):
 
     if len(number) > 1:
         return float(number)
+
+
+def add_event(text, event_date, user_id):
+    """Requires date should be in format YYYY-MM-DD"""
+    if re.search(r'народження|рождения', text, re.IGNORECASE):
+        today = datetime.date.today()
+        if type(event_date) is str:
+            event_date = datetime.datetime.strptime(event_date, '%Y-%m-%d').date()
+
+        if today > event_date:
+            event_date = event_date.replace(year=today.year + 1)
+
+        h = Holiday(name=text, date=event_date, owner_id=user_id)
+        h.save()
 
 
 def get_product(url, request_session=None):
