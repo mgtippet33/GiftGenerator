@@ -119,6 +119,33 @@ def add_event(text, event_date, user_id):
         h.save()
 
 
+def get_user_upcoming(user_id):
+    h = []
+    user_holidays = Holiday.objects.filter(owner_id=user_id)
+    for remain_days in range(5):
+        day = datetime.date.today() + datetime.timedelta(days=remain_days)
+        for event_day in (day, day.replace(year=1900)):
+            data = user_holidays.filter(date=event_day)
+
+            if data.exists():
+                h.append([remain_days, data])
+
+    return h
+
+
+def get_upcoming():
+    h = []
+    for remain_days in range(5):
+        day = datetime.date.today() + datetime.timedelta(days=remain_days)
+        for event_day in (day, day.replace(year=1900)):
+            data = Holiday.objects.filter(date=event_day)
+
+            if data.exists():
+                h.append([remain_days, data])
+
+    return h
+
+
 def get_product(url, request_session=None):
     if request_session:
         response = request_session.get(url)
