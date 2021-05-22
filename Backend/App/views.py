@@ -120,6 +120,41 @@ def evaluate(request):
     return Response(response, status=status_code)
 
 
+@api_view(['POST'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
+def change_fields(request):
+    try:
+        user = User.objects.get(email=request.data['email'])
+
+        if request.data.get('new_email'):
+            user.email = request.data['new_email']
+        if request.data.get('name'):
+            user.name = request.data['name']
+        if request.data.get('password'):
+            user.set_password(request.data['password'])
+        if request.data.get('premium') is not None:
+            user.premium = request.data['premium']
+        if request.data.get('theme') is not None:
+            user.theme = request.data['theme']
+        user.save()
+
+        status_code = status.HTTP_200_OK
+        response = {
+            'success': True,
+            'status code': status_code,
+            'message': 'Fields changed successfully'
+        }
+    except:
+        status_code = status.HTTP_400_BAD_REQUEST
+        response = {
+            'success': False,
+            'status code': status_code,
+            'message': 'User does not exists'
+        }
+    return Response(response, status=status_code)
+
+
 class UserRegistrationView(CreateAPIView):
     serializer_class = UserRegistrationSerializer
     permission_classes = (AllowAny,)
