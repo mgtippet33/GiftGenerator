@@ -34,17 +34,17 @@ def index(request):
     return render(request, 'index.html', {})
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 @authentication_classes([])
 @permission_classes([])
 def search(request):
     try:
         gender = request.data['gender']
-        age = 'Дитина' if request.data['age'] < 13 else \
-            'Підліток' if request.data['age'] < 19 else 'Дорослий'
+        age = 'Дитина' if int(request.data['age']) < 13 else \
+            'Підліток' if int(request.data['age']) < 19 else 'Дорослий'
         link = request.data['link']
         holiday = request.data['holiday']
-        interests = request.data['interests']
+        interests = request.data['interests'].split(',')
 
         if link != 'null' and re.search(r'facebook|twitter', link):
             model, text_transformer = make_classification_tools()
@@ -60,8 +60,10 @@ def search(request):
             )
 
         string = ''
-        for interest in interests:
-            string += f", '{interest}'"
+        if interests[0] != 'null':
+            for interest in interests:
+                string += f", '{interest}'"
+
         search_sql = \
             f"""
             select present.id, present.name, present.link, present.price, present.desc, present.rate
@@ -89,8 +91,9 @@ def search(request):
                             user_id=user_id,
                             date=current_date)
                 h.save()
-                for name in interests:
-                    h.criteria.add(Criterion.objects.get(name=name))
+                if interests[0] != 'null':
+                    for name in interests:
+                        h.criteria.add(Criterion.objects.get(name=name))
 
         status_code = status.HTTP_200_OK
         response = {
@@ -114,8 +117,8 @@ def search(request):
 @permission_classes([])
 def evaluate(request):
     try:
-        present_id = request.data['id']
-        rating = request.data['rating']
+        present_id = int(request.data['id'])
+        rating = int(request.data['rating'])
         present = Present.objects.get(id=present_id)
 
         current_rating = present.rate
@@ -153,9 +156,9 @@ def change_fields(request):
         if request.data.get('password'):
             user.set_password(request.data['password'])
         if request.data.get('premium') is not None:
-            user.premium = request.data['premium']
+            user.premium = int(request.data['premium'])
         if request.data.get('theme') is not None:
-            user.theme = request.data['theme']
+            user.theme = int(request.data['theme'])
         user.save()
 
         status_code = status.HTTP_200_OK
