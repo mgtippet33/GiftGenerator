@@ -13,7 +13,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-from .models import User, Present, Criterion, History
+from .models import User, Present, Criterion, History, Holiday
 from .serializers import UserRegistrationSerializer, UserLoginSerializer
 from .functions import query, parse_twitter, parse_facebook
 from .classification import make_classification_tools, page_predict
@@ -81,6 +81,7 @@ def search(request):
         if request.data.get('email'):
             email = request.data['email']
             user_id = User.objects.get(email=email).id
+            holiday_id = Holiday.objects.get(name=holiday, owner_id=1).id
             History.objects.filter(user_id=user_id).delete()
 
             current_date = datetime.datetime.now()
@@ -88,8 +89,7 @@ def search(request):
             for i in search_data[:5]:
                 present_id = i.get('id')
                 h = History(link=link, age=request.data['age'], gender=gender_number, present_id=present_id,
-                            user_id=user_id,
-                            date=current_date)
+                            user_id=user_id, holiday_id=holiday_id, date=current_date)
                 h.save()
                 if interests[0] != 'null':
                     for name in interests:
@@ -191,6 +191,7 @@ def get_history(request):
             'link': '',
             'age': '',
             'gender': '',
+            'holiday': '',
             'criteria': [],
             'presents': []
         }
@@ -207,6 +208,7 @@ def get_history(request):
             data['link'] = historys[0].link
             data['age'] = historys[0].age
             data['gender'] = genders[historys[0].gender]
+            data['holiday'] = historys[0].holiday.name
             data['criteria'] = [criterion['name']
                                 for criterion in historys[0].criteria.values()]
             for history in historys:
