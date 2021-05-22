@@ -1,3 +1,4 @@
+import datetime
 import re
 
 from django.shortcuts import render, redirect
@@ -12,7 +13,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-from .models import User, Present, Criterion
+from .models import User, Present, Criterion, History
 from .serializers import UserRegistrationSerializer, UserLoginSerializer
 from .functions import query, parse_twitter, parse_facebook
 from .classification import make_classification_tools, page_predict
@@ -61,7 +62,7 @@ def search(request):
         string = ''
         for interest in interests:
             string += f", '{interest}'"
-        sql = \
+        search_sql = \
             f"""
             select present.id, present.name, present.link, present.price, present.desc, present.rate
             from present
@@ -73,12 +74,28 @@ def search(request):
             order by SUM(c.name in ('{gender}', '{age}'{string})) + SUM(h.name in ('{holiday}')) DESC, present.rate DESC
             limit 10;
             """
+        search_data = query(search_sql)
+
+        if request.data.get('email'):
+            email = request.data['email']
+            user_id = User.objects.get(email=email).id
+            History.objects.filter(user_id=user_id).delete()
+
+            current_date = datetime.datetime.now()
+            gender_number = {'Чоловік': 0, 'Жінка': 1, 'Інше': 2}[gender]
+            for i in search_data[:5]:
+                present_id = i.get('id')
+                h = History(link=link, age=request.data['age'], gender=gender_number, present_id=present_id,
+                            user_id=user_id,
+                            date=current_date)
+                h.save()
+
         status_code = status.HTTP_200_OK
         response = {
             'success': True,
             'status code': status_code,
             'message': 'Request processed successfully',
-            'data': query(sql)
+            'data': search_data
         }
     except:
         status_code = status.HTTP_400_BAD_REQUEST
