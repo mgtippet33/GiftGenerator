@@ -174,6 +174,64 @@ def change_fields(request):
     return Response(response, status=status_code)
 
 
+@api_view(['POST'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_history(request):
+    try:
+        user = User.objects.get(email=request.data['email'])
+        success = True
+        status_code = status.HTTP_200_OK
+        message = 'History received successfully'
+        data = {
+            'date': '',
+            'link': '',
+            'age': '',
+            'gender': '',
+            'criteria': [],
+            'presents': []
+        }
+        genders = {0: 'Чоловік', 1: 'Жінка', 2: 'Інше'}
+
+        if not user.premium:
+            success = False
+            status_code = status.HTTP_400_BAD_REQUEST
+            message = 'Not premium user'
+        else:
+            historys = History.objects.filter(user_id=user.id)
+            data['date'] = datetime.datetime.strftime(
+                historys[0].date, '%d.%m.%Y')
+            data['link'] = historys[0].link
+            data['age'] = historys[0].age
+            data['gender'] = genders[historys[0].gender]
+            data['criteria'] = [criterion['name']
+                                for criterion in historys[0].criteria.values()]
+            for history in historys:
+                present = Present.objects.get(id=history.present_id)
+                data['presents'].append({
+                    'id': present.id,
+                    'link': present.link,
+                    'price': present.price,
+                    'desc': present.desc,
+                    'rate': present.rate
+                })
+
+        response = {
+            'success': success,
+            'status code': status_code,
+            'message': message,
+            'data': data
+        }
+    except:
+        status_code = status.HTTP_400_BAD_REQUEST
+        response = {
+            'success': False,
+            'status code': status_code,
+            'message': 'User does not exists'
+        }
+    return Response(response, status=status_code)
+
+
 class UserRegistrationView(CreateAPIView):
     serializer_class = UserRegistrationSerializer
     permission_classes = (AllowAny,)
