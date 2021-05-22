@@ -89,6 +89,8 @@ def search(request):
                             user_id=user_id,
                             date=current_date)
                 h.save()
+                for name in interests:
+                    h.criteria.add(Criterion.objects.get(name=name))
 
         status_code = status.HTTP_200_OK
         response = {
