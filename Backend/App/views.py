@@ -63,27 +63,59 @@ def search(request):
             string += f", '{interest}'"
         sql = \
             f"""
-            select present.name, present.link, present.price, present.desc, present.rate
+            select present.id, present.name, present.link, present.price, present.desc, present.rate
             from present
                     inner join present_criteria pc on present.id = pc.present_id
                     inner join criterion c on c.id = pc.criterion_id
                     inner join present_holidays ph on present.id = ph.present_id
                     inner join holiday h on h.id = ph.holiday_id
             group by present.id
-            order by SUM(c.name in ('{gender}', '{age}'{string})) + SUM(h.name in ('{holiday}')) DESC, present.rate
+            order by SUM(c.name in ('{gender}', '{age}'{string})) + SUM(h.name in ('{holiday}')) DESC, present.rate DESC
             limit 10;
             """
         status_code = status.HTTP_200_OK
         response = {
             'success': True,
             'status code': status_code,
+            'message': 'Request processed successfully',
             'data': query(sql)
         }
     except:
         status_code = status.HTTP_400_BAD_REQUEST
         response = {
             'success': False,
-            'status code': status_code
+            'status code': status_code,
+            'message': 'Bad request'
+        }
+    return Response(response, status=status_code)
+
+
+@api_view(['POST'])
+@authentication_classes([])
+@permission_classes([])
+def evaluate(request):
+    try:
+        present_id = request.data['id']
+        rating = request.data['rating']
+        present = Present.objects.get(id=present_id)
+
+        current_rating = present.rate
+        new_rating = (current_rating + rating * 20) // 2
+        present.rate = new_rating
+        present.save()
+
+        status_code = status.HTTP_200_OK
+        response = {
+            'success': True,
+            'status code': status_code,
+            'message': 'Gift successfully evaluated'
+        }
+    except:
+        status_code = status.HTTP_400_BAD_REQUEST
+        response = {
+            'success': False,
+            'status code': status_code,
+            'message': 'Gift with such id not found'
         }
     return Response(response, status=status_code)
 
@@ -182,12 +214,11 @@ class UserProfileView(RetrieveAPIView):
                     'birthday': user_profile.birthday
                 }]
             }
-        except Exception as e:
+        except:
             status_code = status.HTTP_400_BAD_REQUEST
             response = {
                 'success': False,
                 'status code': status.HTTP_400_BAD_REQUEST,
-                'message': 'User does not exists',
-                'error': str(e)
+                'message': 'User does not exists'
             }
         return Response(response, status=status_code)
