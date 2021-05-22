@@ -210,6 +210,7 @@ def get_history(request):
                 present = Present.objects.get(id=history.present_id)
                 data['presents'].append({
                     'id': present.id,
+                    'name': present.name,
                     'link': present.link,
                     'price': present.price,
                     'desc': present.desc,
