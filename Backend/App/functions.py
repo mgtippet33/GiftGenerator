@@ -110,7 +110,8 @@ def add_event(text, event_date, user_id):
     if re.search(r'народження|рождения', text, re.IGNORECASE):
         today = datetime.date.today()
         if type(event_date) is str:
-            event_date = datetime.datetime.strptime(event_date, '%Y-%m-%d').date()
+            event_date = datetime.datetime.strptime(
+                event_date, '%Y-%m-%d').date()
 
         if today > event_date:
             event_date = event_date.replace(year=today.year + 1)
@@ -119,29 +120,21 @@ def add_event(text, event_date, user_id):
         h.save()
 
 
-def get_user_upcoming(user_id):
+def get_upcoming(user_id):
     h = []
+    holidays = Holiday.objects.filter(owner_id=1)
     user_holidays = Holiday.objects.filter(owner_id=user_id)
     for remain_days in range(5):
         day = datetime.date.today() + datetime.timedelta(days=remain_days)
         for event_day in (day, day.replace(year=1900)):
-            data = user_holidays.filter(date=event_day)
+            holidays_data = holidays.filter(date=event_day)
+            user_holidays_data = user_holidays.filter(date=event_day)
 
-            if data.exists():
-                h.append([remain_days, data])
+            if holidays_data.exists():
+                h.append([remain_days, holidays_data.values()])
 
-    return h
-
-
-def get_upcoming():
-    h = []
-    for remain_days in range(5):
-        day = datetime.date.today() + datetime.timedelta(days=remain_days)
-        for event_day in (day, day.replace(year=1900)):
-            data = Holiday.objects.filter(date=event_day)
-
-            if data.exists():
-                h.append([remain_days, data])
+            if user_holidays_data.exists():
+                h.append([remain_days, user_holidays_data.values()])
 
     return h
 

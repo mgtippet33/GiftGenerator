@@ -15,7 +15,7 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from .models import User, Present, Criterion, History, Holiday
 from .serializers import UserRegistrationSerializer, UserLoginSerializer
-from .functions import query, parse_twitter, parse_facebook
+from .functions import query, parse_twitter, parse_facebook, get_upcoming
 from .classification import make_classification_tools, page_predict
 from GiftGenerator.settings import EMAIL_HOST_USER
 
@@ -227,6 +227,32 @@ def get_history(request):
             'status code': status_code,
             'message': message,
             'data': data
+        }
+    except:
+        status_code = status.HTTP_400_BAD_REQUEST
+        response = {
+            'success': False,
+            'status code': status_code,
+            'message': 'User does not exists'
+        }
+    return Response(response, status=status_code)
+
+
+@api_view(['POST'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
+def upcoming_holidays(request):
+    try:
+        user = User.objects.get(email=request.data['email'])
+        status_code = status.HTTP_200_OK
+
+        response = {
+            'success': True,
+            'status code': status_code,
+            'message': 'Upcoming holidays received successfully',
+            'data': {
+                'holidays': get_upcoming(user.id)
+            }
         }
     except:
         status_code = status.HTTP_400_BAD_REQUEST
