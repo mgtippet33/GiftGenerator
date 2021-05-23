@@ -239,11 +239,16 @@ def get_history(request):
 
 
 @api_view(['POST'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
+@authentication_classes([])
+@permission_classes([])
 def upcoming_holidays(request):
     try:
-        user = User.objects.get(email=request.data['email'])
+        if request.data.get('email'):
+            user = User.objects.get(email=request.data['email'])
+            holidays = get_upcoming(user.id)
+        else:
+            holidays = get_upcoming(None)
+
         status_code = status.HTTP_200_OK
 
         response = {
@@ -251,7 +256,7 @@ def upcoming_holidays(request):
             'status code': status_code,
             'message': 'Upcoming holidays received successfully',
             'data': {
-                'holidays': get_upcoming(user.id)
+                'holidays': holidays
             }
         }
     except:
