@@ -73,7 +73,7 @@ def search(request):
                     inner join present_holidays ph on present.id = ph.present_id
                     inner join holiday h on h.id = ph.holiday_id
             group by present.id
-            order by SUM(c.name in ('{gender}', '{age}'{string})) + SUM(h.name in ('{holiday}')) DESC, present.rate DESC
+            order by SUM(c.name in ('{gender}', '{age}'{string})) + SUM(h.name in ('{holiday}')) DESC, present.rate DESC, rand()
             limit 10;
             """
         search_data = query(search_sql)
