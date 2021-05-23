@@ -47,17 +47,17 @@ def search(request):
         interests = request.data['interests'].split(',')
 
         if link != 'null' and re.search(r'facebook|twitter', link):
-            model, text_transformer = make_classification_tools()
             if 'twitter' in link:
                 parse_data = parse_twitter(link)
             else:
                 parse_data = parse_facebook(link)
-
-            interests += page_predict(
-                page_data=parse_data,
-                classifier=model,
-                vectorizer=text_transformer
-            )
+            if parse_data:
+                model, text_transformer = make_classification_tools()
+                interests += page_predict(
+                    page_data=parse_data,
+                    classifier=model,
+                    vectorizer=text_transformer
+                )
 
         string = ''
         if interests[0] != 'null':

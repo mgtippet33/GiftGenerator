@@ -76,22 +76,23 @@ def make_classification_tools():
 
 
 def page_predict(page_data, classifier, vectorizer, criteria_count=2):
-    criteria = {c: 0 for c in classes}
+    if page_data:
+        criteria = {c: 0 for c in classes}
 
-    for text in page_data:
-        _, probs = text_predict(text, classifier, vectorizer)
-        for i, v in enumerate(probs):
-            class_idx = classes[i]
-            criteria[class_idx] += v
+        for text in page_data:
+            _, probs = text_predict(text, classifier, vectorizer)
+            for i, v in enumerate(probs):
+                class_idx = classes[i]
+                criteria[class_idx] += v
 
-    criteria = sorted(
-        criteria.items(),
-        key=lambda item: item[1],
-        reverse=True
-    )
-    criteria_names = tuple(TRANSLATIONS[k] for k, v in criteria[:criteria_count])
+        criteria = sorted(
+            criteria.items(),
+            key=lambda item: item[1],
+            reverse=True
+        )
+        criteria_names = tuple(TRANSLATIONS[k] for k, v in criteria[:criteria_count])
 
-    return criteria_names
+        return criteria_names
 
 
 def text_predict(text, classifier, vectorizer):

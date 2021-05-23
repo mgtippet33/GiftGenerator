@@ -72,27 +72,33 @@ def cut_url(url):
 
 
 def parse_twitter(url, tweets_count=10):
-    ts = TwitterScraper()
-    name = cut_url(url)
-    profile = ts.get_profile(name=name)
-    profile_id = profile.__dict__['id']
+    try:
+        ts = TwitterScraper()
+        name = cut_url(url)
+        profile = ts.get_profile(name=name)
+        profile_id = profile.__dict__['id']
 
-    tweets_text = set()
-    tweets = ts.get_tweets(profile_id, count=tweets_count)
-    for tweet in tweets.contents:
-        tweets_text.add(tweet['text'])
+        tweets_text = set()
+        tweets = ts.get_tweets(profile_id, count=tweets_count)
+        for tweet in tweets.contents:
+            tweets_text.add(tweet['text'])
 
-    return tweets_text
+        return tweets_text
+    except:
+        return None
 
 
 def parse_facebook(url, posts_count=2):
-    name = cut_url(url)
+    try:
+        name = cut_url(url)
 
-    posts_text = set()
-    for post in get_posts(name, pages=posts_count):
-        posts_text.add(post['text'])
+        posts_text = set()
+        for post in get_posts(name, pages=posts_count):
+            posts_text.add(post['text'])
 
-    return posts_text
+        return posts_text
+    except:
+        return None
 
 
 def to_float(string):
