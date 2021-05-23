@@ -124,7 +124,7 @@ def get_upcoming(user_id):
     h = []
     holidays = Holiday.objects.filter(owner_id=1)
     user_holidays = Holiday.objects.filter(owner_id=user_id)
-    for remain_days in range(5):
+    for remain_days in range(6):
         day = datetime.date.today() + datetime.timedelta(days=remain_days)
         for event_day in (day, day.replace(year=1900)):
             holidays_data = holidays.filter(date=event_day)

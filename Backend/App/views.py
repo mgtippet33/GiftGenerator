@@ -15,7 +15,7 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from .models import User, Present, Criterion, History, Holiday
 from .serializers import UserRegistrationSerializer, UserLoginSerializer
-from .functions import query, parse_twitter, parse_facebook, get_upcoming
+from .functions import query, parse_twitter, parse_facebook, get_upcoming, add_event
 from .classification import make_classification_tools, page_predict
 from GiftGenerator.settings import EMAIL_HOST_USER
 
@@ -204,7 +204,7 @@ def get_history(request):
         else:
             historys = History.objects.filter(user_id=user.id)
             data['date'] = datetime.datetime.strftime(
-                historys[0].date, '%d.%m.%Y')
+                historys[0].date, '%d-%m-%Y')
             data['link'] = historys[0].link
             data['age'] = historys[0].age
             data['gender'] = genders[historys[0].gender]
@@ -255,6 +255,41 @@ def upcoming_holidays(request):
             }
         }
     except:
+        status_code = status.HTTP_400_BAD_REQUEST
+        response = {
+            'success': False,
+            'status code': status_code,
+            'message': 'User does not exists'
+        }
+    return Response(response, status=status_code)
+
+
+@api_view(['POST'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
+def add_holiday(request):
+    try:
+        user = User.objects.get(email=request.data['email'])
+        status_code = status.HTTP_200_OK
+        success = True
+        message = 'Holiday added successfully'
+        date = datetime.datetime.strptime(
+            request.data['date'], '%Y-%m-%d').date()
+
+        if not Holiday.objects.filter(name=request.data['name'], date=date, owner_id=user.id).exists():
+            h = Holiday(name=request.data['name'], date=date, owner_id=user.id)
+            h.save()
+        else:
+            success = False
+            message = 'Holiday already exists'
+
+        response = {
+            'success': success,
+            'status code': status_code,
+            'message': message
+        }
+    except Exception as e:
+        print(e)
         status_code = status.HTTP_400_BAD_REQUEST
         response = {
             'success': False,
