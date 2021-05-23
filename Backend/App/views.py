@@ -202,27 +202,33 @@ def get_history(request):
             success = False
             status_code = status.HTTP_400_BAD_REQUEST
             message = 'Not premium user'
+            data = {}
         else:
             historys = History.objects.filter(user_id=user.id)
-            data['date'] = datetime.datetime.strftime(
-                historys[0].date, '%d-%m-%Y')
-            data['link'] = historys[0].link
-            data['age'] = historys[0].age
-            data['gender'] = genders[historys[0].gender]
-            data['holiday'] = historys[0].holiday.name
-            data['criteria'] = [criterion['name']
-                                for criterion in historys[0].criteria.values()]
-            for history in historys:
-                present = Present.objects.get(id=history.present_id)
-                data['presents'].append({
-                    'id': present.id,
-                    'name': present.name,
-                    'link': present.link,
-                    'price': present.price,
-                    'desc': present.desc,
-                    'rate': present.rate
-                })
-
+            if historys.exists():
+                data['date'] = datetime.datetime.strftime(
+                    historys[0].date, '%d-%m-%Y')
+                data['link'] = historys[0].link
+                data['age'] = historys[0].age
+                data['gender'] = genders[historys[0].gender]
+                data['holiday'] = historys[0].holiday.name
+                data['criteria'] = [criterion['name']
+                                    for criterion in historys[0].criteria.values()]
+                for history in historys:
+                    present = Present.objects.get(id=history.present_id)
+                    data['presents'].append({
+                        'id': present.id,
+                        'name': present.name,
+                        'link': present.link,
+                        'price': present.price,
+                        'desc': present.desc,
+                        'rate': present.rate
+                    })
+            else:
+                success = False
+                status_code = status.HTTP_400_BAD_REQUEST
+                message = 'User has no history'
+                data = {}
         response = {
             'success': success,
             'status code': status_code,
