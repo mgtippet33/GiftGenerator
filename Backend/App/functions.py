@@ -107,7 +107,7 @@ def to_float(string):
 
 def add_event(text, event_date, user_id):
     """Requires date should be in format YYYY-MM-DD"""
-    if re.search(r'народження|рождения', text, re.IGNORECASE):
+    if re.search(r'народження|рожд', text, re.IGNORECASE):
         today = datetime.date.today()
         if type(event_date) is str:
             event_date = datetime.datetime.strptime(
@@ -116,8 +116,10 @@ def add_event(text, event_date, user_id):
         if today > event_date:
             event_date = event_date.replace(year=today.year + 1)
 
-        h = Holiday(name=text, date=event_date, owner_id=user_id)
-        h.save()
+        if not Holiday.objects.filter(name=text, date=event_date, owner_id=user_id).exists():
+            h = Holiday(name=text, date=event_date, owner_id=user_id)
+            h.save()
+            return True
 
 
 def get_upcoming(user_id):

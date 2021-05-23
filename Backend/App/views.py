@@ -276,10 +276,7 @@ def add_holiday(request):
         date = datetime.datetime.strptime(
             request.data['date'], '%Y-%m-%d').date()
 
-        if not Holiday.objects.filter(name=request.data['name'], date=date, owner_id=user.id).exists():
-            h = Holiday(name=request.data['name'], date=date, owner_id=user.id)
-            h.save()
-        else:
+        if not add_event(request.data['name'], date, user.id):
             success = False
             message = 'Holiday already exists'
 
@@ -288,8 +285,7 @@ def add_holiday(request):
             'status code': status_code,
             'message': message
         }
-    except Exception as e:
-        print(e)
+    except:
         status_code = status.HTTP_400_BAD_REQUEST
         response = {
             'success': False,
