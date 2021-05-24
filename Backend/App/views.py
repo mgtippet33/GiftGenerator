@@ -1,6 +1,8 @@
+import os
 import datetime
 import re
 
+from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.contrib import messages
@@ -32,6 +34,20 @@ def index(request):
         messages.success(request, 'Form submission successful')
         return redirect('home')
     return render(request, 'index.html', {})
+
+
+def download_apk(request):
+    file_base_name = 'GiftGenerator'
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    file_path = BASE_DIR + '/App/download/' + file_base_name + '.apk'
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as fh:
+            response = HttpResponse(
+                fh.read(), content_type="application/force_download")
+            response['Content-Disposition'] = 'inline; filename=' + \
+                os.path.basename(file_path)
+            return response
+    raise Http404
 
 
 @api_view(['POST'])

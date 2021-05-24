@@ -1,7 +1,8 @@
 from django.conf.urls import url
 from django.urls import path
 
-from .views import index, search, evaluate, get_history, change_fields, upcoming_holidays, add_holiday, UserRegistrationView, UserLoginView, UserProfileView
+from .views import index, search, evaluate, get_history, change_fields, upcoming_holidays, add_holiday, \
+    UserRegistrationView, UserLoginView, UserProfileView, download_apk
 
 urlpatterns = [
     path(r'', index, name='home'),
@@ -13,5 +14,6 @@ urlpatterns = [
     url(r'add_holiday', add_holiday, name='add_holiday'),
     url(r'api/signUp', UserRegistrationView.as_view(), name='signUp'),
     url(r'api/signIn', UserLoginView.as_view(), name='signIn'),
-    url(r'api/profile', UserProfileView.as_view(), name='profile')
+    url(r'api/profile', UserProfileView.as_view(), name='profile'),
+    path(r'apk/GiftGenerator/', download_apk, name='download_apk'),
 ]
