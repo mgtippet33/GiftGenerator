@@ -29,3 +29,6 @@ db*.json
 
 # Classification data
 classification_data/
+
+# Apk file
+download/
