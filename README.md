@@ -1,5 +1,5 @@
 # Gift Generator
-![progress](https://img.shields.io/badge/progress-developing-yellow.svg)
+![progress](https://img.shields.io/badge/progress-released-brightgreen)
 ![contributions](https://img.shields.io/badge/contributions-welcome-green.svg) 
 
 ### A simple application for selection of gifts according to preferences.
